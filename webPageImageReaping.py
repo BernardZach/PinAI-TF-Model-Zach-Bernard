@@ -5,12 +5,12 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
 import urllib.request
-from tqdm import tqdm
 from progressbar import ProgressBar
 
 # Set the number of times to click the button and the delay between each click
 num_clicks = 493
 delay_between_clicks = .5  # in seconds
+image_loading = 60          #in seconds
 
 options = webdriver.ChromeOptions()
 options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3')
@@ -42,8 +42,12 @@ for i in range(num_clicks):
     time.sleep(delay_between_clicks)
 
 
-#puase after loading all pages in order to allow all images to laod
-time.sleep(500)
+#pause after loading all pages in order to allow all images to laod
+progress_bar = ProgressBar(max_value=image_loading)
+print("\n\n\n\n--Awaiting Image Loading--")
+for i in image_loading:
+    progress_bar.update(i)
+    time.sleep(1)
 
 
 # Create the 'images' directory if it doesn't exist
