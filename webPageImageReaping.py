@@ -6,10 +6,11 @@ import time
 import os
 import urllib.request
 from progressbar import ProgressBar
+import subprocess
 
 # Set the number of times to click the button and the delay between each click
 num_clicks = 493
-delay_between_clicks = .5  # in seconds
+delay_between_clicks = 5  # in seconds
 image_loading = 60          #in seconds
 
 options = webdriver.ChromeOptions()
@@ -25,6 +26,7 @@ wait = WebDriverWait(browser, 10)
 # Wait for the "Load More" button element to become visible
 load_more_button = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, '#moreButton')))
 
+subprocess.run(["clear"])
 print("\n\n\n\n--Currently Loading WebPage--")
 
 # Create a progress bar object
@@ -45,7 +47,7 @@ for i in range(num_clicks):
 #pause after loading all pages in order to allow all images to laod
 progress_bar = ProgressBar(max_value=image_loading)
 print("\n\n\n\n--Awaiting Image Loading--")
-for i in image_loading:
+for i in range(image_loading):
     progress_bar.update(i)
     time.sleep(1)
 
