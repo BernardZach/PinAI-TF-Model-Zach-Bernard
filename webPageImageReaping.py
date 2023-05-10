@@ -15,6 +15,8 @@ image_loading = 60          #in seconds
 
 options = webdriver.ChromeOptions()
 options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3')
+options.add_argument('--ignore-certificate-errors')
+
 
 browser = webdriver.Chrome(options=options)
 browser.get('https://www.pintradingdb.com/pinList.php?')
@@ -90,6 +92,6 @@ for i, image_element in enumerate(image_elements):
     progress_bar.update(i)
 
     # Add a delay between each image download
-    time.sleep(.125)
+    time.sleep(.1)
 
 browser.quit()
