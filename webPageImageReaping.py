@@ -66,6 +66,8 @@ print("\n\n\n\n--Currently Loading Images--")
 # Create a progress bar object
 progress_bar = ProgressBar(max_value=len(image_elements))
 
+startIndex = 30445      #use in the case the initial image downloads did not complete
+
 # Loop through the image elements and save each image to a file
 for i, image_element in enumerate(image_elements):
     # Get the source URL and filename of the image
@@ -93,5 +95,43 @@ for i, image_element in enumerate(image_elements):
 
     # Add a delay between each image download
     time.sleep(.1)
+
+startIndex = input("Did all the images get sucessfully scraped? if so type Y. if not type the last image that was successfully saved.\n")
+
+while startIndex != "Y":
+    if not isinstance(startIndex, int):
+        print("Invalid Input recieved.")
+    
+    else:
+        # Loop through the image elements and save each image to a file
+        for i, image_element in enumerate(image_elements[startIndex:], startIndex):
+
+            # Get the source URL and filename of the image
+            image_url = image_element.get_attribute('src')
+            filename = image_element.get_attribute('title')
+
+            # Replace any invalid characters in the filename
+            filename = filename.replace('/', '-').replace('\\', '-').replace(':', '-').replace('*', '-').replace('?', '-').replace('"', '').replace('<', '').replace('>', '').replace('|', '').replace('\t', '_')
+
+            # Generate a unique filename for the image
+            filename = f'{i+1:03d} - {filename}.jpg'
+
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'}
+
+            # Save the image to a file in the 'images' folder
+            req = urllib.request.Request(image_url, headers=headers)
+            response = urllib.request.urlopen(req)
+            data = response.read()
+
+            with open(os.path.join('images', filename), 'wb') as f:
+                f.write(data)
+
+            # Update the progress bar
+            progress_bar.update(i)
+
+            # Add a delay between each image download
+            time.sleep(.1)
+
+    startIndex = input("Did all the images get sucessfully scraped? if so type Y. if not type the last image that was successfully saved.\n")
 
 browser.quit()
