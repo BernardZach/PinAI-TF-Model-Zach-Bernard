@@ -9,8 +9,8 @@ from progressbar import ProgressBar
 import subprocess
 
 # Set the number of times to click the button and the delay between each click
-num_clicks = 493
-delay_between_clicks = 5  # in seconds
+num_clicks = 494
+delay_between_clicks = 3  # in seconds
 image_loading = 60          #in seconds
 
 options = webdriver.ChromeOptions()
@@ -88,6 +88,7 @@ for i, image_element in enumerate(image_elements):
     data = response.read()
 
     with open(os.path.join('images', filename), 'wb') as f:
+        time.sleep(.1)
         f.write(data)
 
     # Update the progress bar
