@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Upload</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <div class="ui container">
+        <h1 class="ui dividing header">Upload New Video</h1>
+        <form class="ui form" method="post" enctype="multipart/form-data">
+            <div class="field">
+                <label>Title</label>
+                <input type="text" name="title" placeholder="Video Title">
+            </div>
+            <div class="field">
+                <label>Description</label>
+                <input type="text" name="description" placeholder="Video Description">
+            </div>
+            <div class="field">
+                <label>File</label>
+                <input type="file" name="file">
+            </div>
+            <button class="ui button" type="submit">Upload</button>
+        </form>
+        <h2 class="ui dividing header">Uploaded Videos</h2>
+        <div class="ui segments">
+            {% for video in videos %}
+                {% set video_exists = url_for('static', filename='uploaded_videos/' ~ video.filename) %}
+                {% if video_exists %}
+                    <div class="ui segment">
+                        <h3 class="ui header">{{ video.title }}</h3>
+                        <p>{{ video.description }}</p>
+                        <video width="320" height="240" controls>
+                            <source src="{{ video_exists }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                {% else %}
+                    <div class="ui segment">
+                        <h3 class="ui header">Missing Video</h3>
+                        <p>Video titled "{{ video.title }}" is missing.</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.js"></script>
+</body>
+</html>
