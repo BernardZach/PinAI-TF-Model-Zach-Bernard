@@ -1,0 +1,16 @@
+/* VideoUpload.css */
+.ui.container {
+  margin-top: 20px;
+}
+
+.ui.form .field > label {
+  color: #333; /* Change color as needed */
+  margin-bottom: 5px;
+}
+
+.ui.button.primary {
+  background-color: #2185d0; /* Primary color */
+  color: white;
+}
+
+/* Add more custom styles as needed */
