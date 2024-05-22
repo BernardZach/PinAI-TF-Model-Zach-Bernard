@@ -1,21 +1,18 @@
+import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
-import os
 
 app = Flask(__name__)
 CORS(app)
 
-
-print(os.path.abspath('instance/videos.db'))
-
-
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 db_path = os.path.join(BASE_DIR, 'instance', 'videos.db')
+upload_folder = os.path.join(BASE_DIR, 'static', 'uploaded_videos')
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = 'static/uploaded_videos'
+app.config['UPLOAD_FOLDER'] = upload_folder
 ALLOWED_EXTENSIONS = {'mp4', 'avi', 'mov', 'mkv'}
 
 db = SQLAlchemy(app)
@@ -48,18 +45,22 @@ def upload_file():
         return jsonify({"error": "No selected file"}), 400
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
 
         new_video = Video(title=request.form['title'], description=request.form['description'], filename=filename)
         db.session.add(new_video)
         db.session.commit()
-        
+
+        print(f"File saved to: {file_path}")  # Add this line for debugging
+
         return jsonify({
             "id": new_video.id,
             "title": new_video.title,
             "description": new_video.description,
             "filename": new_video.filename
         }), 200
+
 
 @app.route('/videos', methods=['GET'])
 def get_videos():

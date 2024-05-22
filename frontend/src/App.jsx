@@ -74,23 +74,39 @@ const VideoUpload = () => {
       </form>
       <h2 className="ui dividing header">Uploaded Videos</h2>
       <div className="ui segments">
+
+
+
         {Array.isArray(videos) && videos.map((video) => {
           console.log('Rendering video:', video); // Log each video being rendered
           const videoSrc = `http://127.0.0.1:5000/static/uploaded_videos/${video.filename}`;
           console.log('Video source URL:', videoSrc);
+
+          const mimeType = (filename) => {
+            const ext = filename.split('.').pop().toLowerCase();
+            switch (ext) {
+              case 'mp4': return 'video/mp4';
+              case 'avi': return 'video/x-msvideo';
+              case 'mov': return 'video/quicktime';
+              case 'mkv': return 'video/x-matroska';
+              default: return 'video/mp4';
+            }
+          };
 
           return (
             <div className="ui segment" key={video.id}>
               <h3 className="ui header">{video.title}</h3>
               <p>{video.description}</p>
               <video width="320" height="240" controls>
-
-                <source src={`/static/uploaded_videos/${video.filename}`} type="video/quicktime" />
+                <source src={videoSrc} type={mimeType(video.filename)} />
                 Your browser does not support the video tag.
               </video>
             </div>
           );
         })}
+
+
+
       </div>
     </div>
   );
